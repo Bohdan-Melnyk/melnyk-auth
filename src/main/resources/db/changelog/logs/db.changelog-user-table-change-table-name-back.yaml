@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: changeTableName-userusers-to-users
+      author: Bohdan_Melnyk
+      changes:
+        - renameTable:
+            oldTableName: user
+            newTableName: USERS

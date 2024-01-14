@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: userTable-add-salt-column
+      author: Bohdan_Melnyk
+      changes:
+        - addColumn:
+            tableName: user
+            columns:
+              - column:
+                  name: salt
+                  type: varchar(255)
+
