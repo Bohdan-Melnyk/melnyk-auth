@@ -1,6 +1,5 @@
 package com.blog.melnykauth.service.impl;
 
-import com.blog.melnykauth.dto.UserRegistrationDto;
 import com.blog.melnykauth.entity.User;
 import com.blog.melnykauth.repository.UserRepo;
 import com.blog.melnykauth.service.UserService;
@@ -27,22 +26,5 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findUserByEmail(String email) {
         return userRepo.findByEmail(email);
-    }
-
-    @Override
-    public User registerUser(UserRegistrationDto userRegistrationDto) {
-        var user = findUserByEmail(userRegistrationDto.getEmail());
-        if (user.isEmpty()) {
-            User newUser = new User();
-            newUser.setEmail(userRegistrationDto.getEmail());
-            newUser.setName(userRegistrationDto.getName());
-            newUser.setAge(userRegistrationDto.getAge());
-            newUser.setSex(userRegistrationDto.getSex());
-            newUser.setPass(userRegistrationDto.getPass());
-            saveUser(newUser);
-            return newUser;
-        } else {
-            return null;
-        }
     }
 }
