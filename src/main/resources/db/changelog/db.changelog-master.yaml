@@ -2,8 +2,8 @@ databaseChangeLog:
   - include:
       file: db/changelog/logs/db.changelog-user-table-create.yaml
   - include:
-      - file: db/changelog/logs/db.changelog-user-table-change-table-name.yaml
+      file: db/changelog/logs/db.changelog-user-table-change-table-name.yaml
   - include:
-      - file: db/changelog/logs/db.changelog-user-table-add-salt-column.yaml
+      file: db/changelog/logs/db.changelog-user-table-add-salt-column.yaml
   - include:
-      - file: db/changelog/logs/db.changelog-user-table-change-table-name-back.yaml
+      file: db/changelog/logs/db.changelog-user-table-change-table-name-back.yaml
