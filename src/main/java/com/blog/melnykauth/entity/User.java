@@ -1,16 +1,23 @@
 package com.blog.melnykauth.entity;
 
+import com.blog.melnykauth.role.Role;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "USERS")
@@ -31,6 +38,10 @@ public class User implements UserDetails {
 
     @Column
     private String salt;
+
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(targetClass = Role.class)
+    private List<Role> roles;
 
     public User(Long id, String name, String email, String password, String sex, int age) {
         this.id = id;
@@ -90,6 +101,10 @@ public class User implements UserDetails {
         this.salt = salt;
     }
 
+    public List<Role> getRoles() {
+        return roles;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -118,7 +133,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return getRoles().stream().map(role -> new SimpleGrantedAuthority(role.name())).toList();
     }
 
     @Override
