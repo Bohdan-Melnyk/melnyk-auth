@@ -2,7 +2,6 @@ package com.blog.melnykauth.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,13 +43,17 @@ public class JwtUtil {
     }
 
     private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        extraClaims.put("roles", userDetails.getAuthorities());
         return Jwts
                 .builder()
+                .header()
+                .add("type", "JWT")
+                .and()
                 .claims(extraClaims)
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .signWith(getSigningKey())
                 .compact();
     }
 

@@ -7,3 +7,7 @@ databaseChangeLog:
       file: db/changelog/logs/db.changelog-user-table-add-salt-column.yaml
   - include:
       file: db/changelog/logs/db.changelog-user-table-change-table-name-back.yaml
+  - include:
+      file: db/changelog/logs/db.changelog-user-roles-table-create.yaml
+  - include:
+      file: db/changelog/logs/db.changelog-add-user-roles-foreign-key-constraint.yaml
