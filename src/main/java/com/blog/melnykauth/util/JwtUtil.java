@@ -5,14 +5,18 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 @Component
@@ -43,12 +47,12 @@ public class JwtUtil {
     }
 
     private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        extraClaims.put("roles", userDetails.getAuthorities());
         return Jwts
                 .builder()
                 .header()
                 .add("type", "JWT")
                 .and()
+                .claim("authorities", populateAuthorities(userDetails.getAuthorities()))
                 .claims(extraClaims)
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
@@ -82,5 +86,13 @@ public class JwtUtil {
     private static SecretKey getSecretKey(String secret) {
         byte[] bytes = Decoders.BASE64.decode(secret);
         return Keys.hmacShaKeyFor(bytes);
+    }
+
+    private String populateAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        Set<String> authoritiesSet = new HashSet<>();
+        for (GrantedAuthority grantedAuthority : authorities) {
+            authoritiesSet.add(grantedAuthority.getAuthority());
+        }
+        return String.join(",", authoritiesSet);
     }
 }
